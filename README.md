@@ -11,6 +11,32 @@ Aplicativo desktop em Python baseado em [`yt-dlp`](https://github.com/yt-dlp/yt-
 - Playlists, repetição automática dos links que falharam e cancelamento do lote
 - Links do Spotify via `spotdl` (opcional, só na versão em Python)
 
+## Plataformas
+
+O Baixador de Mídia utiliza o [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) para obter vídeos de diversas plataformas.
+
+### Plataformas em destaque
+
+[![YouTube](https://img.shields.io/badge/YouTube-Vídeos%20e%20Shorts-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/)
+
+[![TikTok](https://img.shields.io/badge/TikTok-Vídeos-000000?logo=tiktok&logoColor=white)](https://www.tiktok.com/)
+
+[![Instagram](https://img.shields.io/badge/Instagram-Reels%20e%20vídeos-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/)
+
+[![Facebook](https://img.shields.io/badge/Facebook-Vídeos-0866FF?logo=facebook&logoColor=white)](https://www.facebook.com/)
+
+[![X](https://img.shields.io/badge/X-Vídeos-000000?logo=x&logoColor=white)](https://x.com/)
+
+### Compatibilidade
+
+A lista acima destaca plataformas com extratores disponíveis no ecossistema do `yt-dlp`; ela não representa uma garantia de funcionamento para todos os links.
+
+A compatibilidade depende do tipo de conteúdo, das restrições de acesso, das mudanças de cada site e da versão do mecanismo de download. Alguns links podem exigir autenticação ou deixar de funcionar temporariamente.
+
+**Spotify:** disponível por meio do `spotdl` na versão executada pelo Python. O recurso não está disponível no executável Windows atual.
+
+Baixe apenas conteúdos que você tenha autorização para salvar.
+
 ## Usar no Windows (sem instalar Python)
 
 1. Abra a página de [**Releases**](https://github.com/IvensArj/Downloader/releases/latest) e baixe `BaixadorMidia-windows.zip`.
@@ -72,7 +98,7 @@ Para só testar a compilação, abra a aba **Actions → Release (Windows) → R
 | Sintoma | O que fazer |
 |---|---|
 | `HTTP Error 403: Forbidden` no YouTube | Instale Deno ou Node 22+ e o `yt-dlp-ejs`, depois atualize o `yt-dlp`. Feche e abra o app. No EXE, baixe a versão mais nova em Releases. |
-| Cabeçalho mostra **Falta yt-dlp-ejs** | Rode `python -m pip install -U "yt-dlp[default]"` com o mesmo Python que abre o app. |
+| Cabeçalho mostra **Falta yt-dlp-ejs** | Rode `python -m pip install -U "yt-dlp[default,curl-cffi]"` com o mesmo Python que abre o app. |
 | Cabeçalho mostra **Falta runtime JS** | Instale o Deno (`winget install DenoLand.Deno`) e reabra o app. |
 | Aviso de FFmpeg não encontrado | Instale com `winget install Gyan.FFmpeg` ou coloque `ffmpeg.exe` e `ffprobe.exe` ao lado do app. |
 | Alguns links falharam no lote | Clique em **Baixar tudo** de novo: só os que falharam são repetidos. |
@@ -87,7 +113,7 @@ Um programa Tkinter não pode ser convertido diretamente em APK: Tkinter não é
 Sites de vídeo mudam com frequência. Quando uma fonte específica deixar de funcionar, atualize o motor. Pela versão em Python, use o botão **Atualizar yt-dlp** do app ou o terminal:
 
 ```bat
-python -m pip install -U "yt-dlp[default]"
+python -m pip install -U "yt-dlp[default,curl-cffi]"
 ```
 
 Depois de atualizar, feche e abra o app de novo. As preferências (pasta, formato, qualidade, número de downloads simultâneos) ficam salvas em `~/.baixador_config.json`.

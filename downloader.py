@@ -33,7 +33,7 @@ import yt_dlp
 # ─── Constantes ──────────────────────────────────────────────────────────────
 
 APP_TITLE   = "Baixador de Mídia"
-APP_VERSION = "4.0"
+APP_VERSION = "4.0.1"
 CONFIG_FILE = Path.home() / ".baixador_config.json"
 MAX_SIMULTANEOS = 8
 URL_REGEX = re.compile(r"https?://[^\s,;\"'<>]+", re.IGNORECASE)
@@ -98,7 +98,10 @@ def detectar_js_runtimes() -> dict:
     return runtimes
 
 
-PIP_CMD = f'"{sys.executable}" -m pip install -U "yt-dlp[default]"'
+PIP_CMD = (
+    f'"{sys.executable}" -m pip install -U '
+    '"yt-dlp[default,curl-cffi]"'
+)
 
 
 def node_major(caminho: str) -> int | None:
@@ -1162,7 +1165,7 @@ class DownloaderApp:
         threading.Thread(target=self._rodar_pip, daemon=True).start()
 
     def _rodar_pip(self):
-        cmd = [sys.executable, "-m", "pip", "install", "-U", "yt-dlp[default]"]
+        cmd = [sys.executable, "-m", "pip", "install", "-U", "yt-dlp[default,curl-cffi]"]
         try:
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                     text=True, errors="replace", creationflags=NO_WINDOW)

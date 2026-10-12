@@ -1,8 +1,8 @@
 name: Release (Windows)
 
 # Gera o executável para Windows e o publica em Releases.
-#  - Ao enviar uma tag (ex.: v4.0): compila e cria a Release com o .zip anexado.
-#  - Em "Run workflow" (manual): só compila e guarda o .zip como artefato, para testar.
+# Ao enviar uma tag v*: compila e cria a Release.
+# Ao executar manualmente: gera um artefato para teste.
 
 on:
   push:
@@ -15,14 +15,42 @@ permissions:
 jobs:
   build-windows:
     runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: requirements*.txt
+
+      # NOVO: instala as dependências antes das validações.
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-build.txt
+
+      # NOVO: interrompe o workflow se alguma validação falhar.
+      - name: Validar código e dependências
+        shell: pwsh
+        run: |
+          python -m compileall -q downloader.py
+          if ($LASTEXITCODE -ne 0) {
+            throw "Erro de sintaxe no código Python."
+          }
+
+          python -m pip check
+          if ($LASTEXITCODE -ne 0) {
+            throw "Foram encontradas dependências incompatíveis."
+          }
+
+          python -c "import yt_dlp, curl_cffi; print('yt-dlp:', yt_dlp.version.__version__); print('curl_cffi: OK')"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Falha ao importar uma das dependências necessárias."
+          }
 
       - name: Baixar FFmpeg (build LGPL)
         shell: pwsh
@@ -41,26 +69,35 @@ jobs:
         shell: pwsh
         run: |
           $zip = "dist\BaixadorMidia-windows.zip"
-          if (-not (Test-Path $zip)) { throw "O arquivo $zip não foi gerado." }
+
+          if (-not (Test-Path $zip)) {
+            throw "O arquivo $zip não foi gerado."
+          }
+
           $hash = (Get-FileHash $zip -Algorithm SHA256).Hash
+
           $notas = @"
           ## Como usar
 
           1. Baixe **BaixadorMidia-windows.zip** abaixo e extraia a pasta.
           2. Abra **BaixadorMidia.exe**.
-          3. Para baixar do YouTube é preciso ter o [Deno](https://deno.com) ou o Node.js 22+ instalado
-             (ou colocar o ``deno.exe`` ao lado do ``BaixadorMidia.exe``).
+          3. Para baixar do YouTube, instale o [Deno](https://deno.com)
+             ou o Node.js 22+.
 
-          O Windows pode mostrar o aviso "O Windows protegeu o computador" (SmartScreen), porque o
-          programa não é assinado digitalmente. Clique em **Mais informações → Executar assim mesmo**.
+          O Windows pode mostrar o aviso "O Windows protegeu o computador"
+          (SmartScreen), porque o programa não é assinado digitalmente.
+          Clique em **Mais informações → Executar assim mesmo**.
 
-          Componentes de terceiros e licenças: ``THIRD_PARTY_NOTICES.md``.
+          Componentes de terceiros e licenças:
+          `THIRD_PARTY_NOTICES.md`.
 
-          **SHA256 do zip:** ``$hash``
+          **SHA256 do ZIP:** `$hash`
           "@
+
           Set-Content -Path release_notes.md -Value $notas -Encoding utf8NoBOM
 
-      - uses: actions/upload-artifact@v4
+      - name: Disponibilizar artefato para teste
+        uses: actions/upload-artifact@v4
         with:
           name: BaixadorMidia-windows
           path: dist/BaixadorMidia-windows.zip
