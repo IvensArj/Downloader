@@ -32,7 +32,7 @@ if errorlevel 1 goto :falha
 
 echo [2/3] Gerando o executavel %MODE%...
 python -m PyInstaller --noconfirm --clean %MODE% --windowed --name BaixadorMidia ^
-  --collect-data customtkinter --collect-all yt_dlp_ejs ^
+  --collect-data customtkinter --collect-all yt_dlp_ejs --collect-all curl_cffi ^
   --add-binary "ffmpeg.exe;." --add-binary "ffprobe.exe;." ^
   downloader.py
 if errorlevel 1 goto :falha
