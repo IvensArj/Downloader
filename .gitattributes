@@ -1,0 +1,5 @@
+# Normaliza finais de linha. Arquivos .bat precisam de CRLF, senão o cmd.exe pode falhar.
+* text=auto
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh  text eol=lf

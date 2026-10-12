@@ -1,0 +1,4 @@
+# Opcional: só é necessário para baixar links do Spotify (versão em Python).
+# O spotdl é pesado e traz dependências próprias, por isso fica separado.
+-r requirements.txt
+spotdl>=4.0.0

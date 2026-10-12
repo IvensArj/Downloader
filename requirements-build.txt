@@ -1,0 +1,3 @@
+# Dependências para GERAR o executável (build_exe.bat usa este arquivo)
+-r requirements.txt
+pyinstaller>=6.0

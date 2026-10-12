@@ -1,0 +1,32 @@
+# Python: arquivos temporários
+__pycache__/
+*.py[cod]
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Cache
+.spotdl-cache
+
+# Arquivos gerados durante a compilação
+build/
+dist/
+# Spec do PyInstaller gerado pelo build_exe.bat (só na raiz, para não afetar
+# o buildozer.spec do android_kivy)
+/*.spec
+
+# Executáveis e binários baixados para a compilação (ffmpeg.exe, ffprobe.exe, deno.exe...)
+*.exe
+
+# Mídias locais e pacotes de teste
+Audios/
+Videos/
+*.zip
+
+# Editor / sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
