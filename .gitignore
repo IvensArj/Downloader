@@ -30,3 +30,9 @@ Videos/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Estúdio de Mídia
+/studio/node_modules/
+/studio/target/
+/studio/src-tauri/gen/
+/studio/src-tauri/bin/

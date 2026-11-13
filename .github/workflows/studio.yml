@@ -1,0 +1,68 @@
+name: Estúdio de Mídia (Windows)
+
+on:
+  pull_request:
+    paths: ['studio/**', '.github/workflows/studio.yml']
+  workflow_dispatch:
+  push:
+    tags: ['studio-v*']
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: studio/package-lock.json
+      - name: Instalar dependências da interface
+        run: npm ci
+      - name: Configurar ferramentas do núcleo
+        shell: pwsh
+        run: |
+          rustup default stable
+          choco install ffmpeg -y --no-progress
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Testar SQLite e conversão de mídia
+        run: cargo test --locked -p studio-core
+      - name: Compilar e empacotar
+        run: npm run tauri build -- --bundles nsis
+      - name: Calcular SHA-256
+        shell: pwsh
+        run: |
+          Get-ChildItem target/release/bundle/nsis -Filter '*.exe' | ForEach-Object {
+            "$((Get-FileHash -LiteralPath $_.FullName).Hash)  $($_.Name)"
+          } | Set-Content target/release/bundle/nsis/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: estudio-de-midia-windows
+          path: |
+            studio/target/release/bundle/nsis/*
+            studio/docs/demonstracao.mp4
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/studio-v')
+    needs: windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: estudio-de-midia-windows
+          path: release
+      - name: Publicar piloto marcado com tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mapfile -d '' files < <(find release -type f -print0)
+          gh release create "$GITHUB_REF_NAME" "${files[@]}" --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease --generate-notes --title "Estúdio de Mídia $GITHUB_REF_NAME" --notes "Piloto Windows x64. Requer FFmpeg e FFprobe instalados. O aplicativo inclui um vídeo de exemplo para a primeira conversão."

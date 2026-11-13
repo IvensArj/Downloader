@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Estúdio de Mídia",
+  "version": "0.1.0",
+  "identifier": "com.ivensarj.estudiodemidia",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{"label": "main", "title": "Estúdio de Mídia", "width": 1190, "height": 800, "minWidth": 640, "minHeight": 510}],
+    "security": {"csp": "default-src 'self'; connect-src ipc: http://ipc.localhost; style-src 'self'; font-src 'self'; img-src 'self' data:"}
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "icon": ["icons/icon.ico", "icons/icon.png"],
+    "resources": ["resources/exemplo.mp4", "resources/Instrument-Sans-OFL.txt", "resources/IBM-Plex-Mono-OFL.txt"],
+    "shortDescription": "Conversão local de vídeos e áudios em lote"
+  }
+}

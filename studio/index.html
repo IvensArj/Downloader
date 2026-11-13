@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Estúdio de Mídia</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img id="brand-icon" alt="" width="36" height="36" /><span
+          >Estúdio de Mídia</span
+        >
+      </div>
+      <label class="appearance"
+        >Aparência
+        <select id="theme">
+          <option value="system">Sistema</option>
+          <option value="light">Claro</option>
+          <option value="dark">Escuro</option>
+        </select></label
+      >
+    </header>
+    <main>
+      <div class="workspace-heading">
+        <h1>Preparar mídia</h1>
+        <p id="notice" role="status"></p>
+      </div>
+      <div id="tool-warning" class="warning" hidden>
+        <strong>FFmpeg e FFprobe indisponíveis.</strong> Instale o FFmpeg no
+        PATH ou coloque os dois executáveis junto do app e abra novamente.
+      </div>
+      <div class="workspace">
+        <section class="panel compose" aria-labelledby="input-title">
+          <header class="section-heading">
+            <h2 id="input-title">Entrada</h2>
+            <span id="input-count" class="meta"></span>
+          </header>
+          <div id="drop-zone" class="drop-zone">
+            <div class="drop-symbol" aria-hidden="true">↓</div>
+            <strong>Solte arquivos aqui</strong>
+            <button type="button" id="browse" class="secondary">
+              Escolher arquivos
+            </button>
+          </div>
+          <form id="link-form" class="link-form">
+            <label for="link">Link direto</label>
+            <div class="inline">
+              <input
+                id="link"
+                type="url"
+                placeholder="https://…/video.mp4"
+                required
+              /><button
+                type="submit"
+                class="secondary"
+                aria-label="Adicionar link"
+              >
+                +
+              </button>
+            </div>
+          </form>
+          <ul
+            id="sources"
+            class="sources"
+            aria-label="Arquivos para exportar"
+          ></ul>
+          <div class="export-settings">
+            <label for="preset">Preset</label>
+            <select id="preset">
+              <option value="mp4">MP4 compatível</option>
+              <option value="mp3">Extrair áudio em MP3</option>
+            </select>
+            <label for="folder">Salvar em</label>
+            <button type="button" id="folder" class="secondary folder">
+              Escolher pasta…
+            </button>
+            <button type="button" id="queue" class="primary" disabled>
+              Adicionar à fila
+            </button>
+          </div>
+          <button type="button" id="sample" class="quiet sample">
+            Testar com vídeo de exemplo
+          </button>
+        </section>
+        <section class="panel queue" aria-labelledby="queue-title">
+          <header class="section-heading">
+            <h2 id="queue-title">Trabalhos</h2>
+            <span id="activity" class="meta"></span>
+          </header>
+          <nav class="filters" aria-label="Trabalhos">
+            <button type="button" data-view="active" aria-pressed="true">
+              Fila</button
+            ><button type="button" data-view="history" aria-pressed="false">
+              Histórico
+            </button>
+          </nav>
+          <div id="jobs-empty" class="empty">
+            <div class="empty-mark" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <strong id="empty-title">A fila está vazia</strong>
+            <p id="empty-description">
+              Adicione um arquivo ou link para começar.
+            </p>
+          </div>
+          <ul id="jobs" class="jobs" aria-label="Trabalhos de mídia"></ul>
+        </section>
+        <aside class="panel inspector" aria-labelledby="details-title">
+          <header class="section-heading">
+            <h2 id="details-title">Detalhes</h2>
+          </header>
+          <div id="details" class="detail-content">
+            <p class="muted">
+              Selecione um arquivo ou trabalho para inspecionar.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -2,6 +2,8 @@
 
 Aplicativo desktop em Python baseado em [`yt-dlp`](https://github.com/yt-dlp/yt-dlp), com interface em CustomTkinter. Baixe somente conteúdo que você tenha autorização para salvar.
 
+O [Estúdio de Mídia](studio/README.md) é o piloto Windows em Tauri para inspecionar e converter arquivos locais ou links diretos em lote.
+
 ## Recursos
 
 - Vários links de uma vez (um por linha, colados ou importados de um `.txt`)

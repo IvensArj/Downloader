@@ -1,0 +1,3 @@
+[workspace]
+members = ["media-core", "src-tauri"]
+resolver = "2"
